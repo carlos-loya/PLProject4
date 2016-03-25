@@ -38,17 +38,29 @@ s_dept = (('ID', 'NAME', 'REGION_ID'),
         (44, 'Operations', 4),
         (45, 'Operations', 5),
         (50, 'Administration', 1),
-
         )
 
 
-'''
-select * from s_dept;
-select last_name, first_name, title, salary from s_emp;
-select last_name, first_name, title, salary from s_emp where salary > 1500 and dept_id > 40;
-select last_name, first_name, title, salary from s_emp where salary > 1500 and dept_id > 40 order by last_name;
-select last_name, first_name, title, salary from s_emp where salary > 1500 and dept_id > 40 order by salary desc;
-select last_name, first_name, title, salary, name from s_emp e join s_dept d on(e.dept_id = d.id);
-select dept_id, avg(salary) from s_emp group by dept_id order by dept_id;
-select dept_id, avg(salary) from s_emp group by dept_id having avg(salary) < 1500;
-'''
+
+print "\nselect * from s_dept"
+
+print "\nselect last_name, first_name, title, salary from s_emp\n", [[i[1],i[2],i[6],i[7]] for i in s_emp[1::]]
+
+print "\nselect last_name, first_name, title, salary from s_emp where salary > 1500 and dept_id > 40"
+
+print "\nselect last_name, first_name, title, salary from s_emp where salary > 1500 and dept_id > 40 order by last_name\n",\
+    sorted([[i[1],i[2],i[6],i[7]] for i in s_emp[1::] if i[7] > 1500 and i[9] > 40], key=lambda x: x[0])
+
+print "\nselect last_name, first_name, title, salary from s_emp where salary > 1500 and dept_id > 40 order by salary desc"
+
+print "\nselect last_name, first_name, title, salary, name from s_emp e join s_dept d on(e.dept_id = d.id)\n",\
+    [[i[1],i[2],i[6],i[7],j[1]] for i in s_emp[1::] for j in s_dept[1::] if i[9] == j[0]]
+
+print "\nselect dept_id, avg(salary) from s_emp group by dept_id order by dept_id"
+
+print "\nselect dept_id, avg(salary) from s_emp group by dept_id having avg(salary) < 1500\n",
+#the codes in class produce spaces in result.
+list1=[]
+for dept in {d[9] for d in s_emp[1::]}: (lambda dept,avgSal: list1.append([dept,avgSal]) if avgSal<1500 else '')(dept,(lambda l: round(sum(l)/len(l),2))(map(float,[i[7] for i in s_emp[1::] if i[9] == dept])))
+print list1
+
